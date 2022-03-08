@@ -5,7 +5,7 @@ function App() {
   const [text, setText] = useState("");
 
   /* This is just an example to show that we can access
-  the endpoint wihout writing the whole path, and that 
+  the endpoint without writing the whole path, and that 
   the proxy feature of the create-react-app proxies the request
   to our server application */
   useEffect(() => {
