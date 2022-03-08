@@ -6,25 +6,48 @@ const app = express();
 
 const User = require("./models/User");
 const mongoose = require("mongoose");
+const { find } = require("./models/User");
 
 app.use(express.json());
 
 /*
 All your api endpoints should be prefixed with /api and be before the next ones
 If you have many endpoints, consider use Express Router for each set of endpoints
-*  Hallo/
+*/
 
-app.post("/api/v1/auth/register", async (req, res) => {
+app.get("/api/v1/auth/user", async (req, res) => {
   try {
-    const newUser = await User.create(req.body);
-    res.status(200).json({ newUser });
+    const allUsers = await User.find({});
+    res.status(200).json({ allUsers });
   } catch (err) {
     res.status(400).json({ err });
   }
 });
 
-app.post("/api/v1/auth/login", (req, res) => {
-  res.status(200).send("login user");
+app.post("/api/v1/auth/register", async (req, res) => {
+  try {
+    const newUser = await User.create(req.body);
+    res.status(201).json({ newUser });
+  } catch (err) {
+    res.status(400).json({ err });
+  }
+});
+
+app.post("/api/v1/auth/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  const isPasswordCorrect = await user.comparePassword(password);
+
+  console.log(isPasswordCorrect);
+
+  if (!isPasswordCorrect) {
+    res.status(400).send("password is not correct");
+    return;
+  }
+  token = user.createToken();
+  res.status(200).json({ user: { name: user.displayName }, token });
 });
 
 app.get("/api/v1/hello-world", (req, res) => {
