@@ -66,7 +66,7 @@ const start = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     app.listen(PORT, () => {
-      console.log("listening on port 3000 ....");
+      console.log("listening on port 4000 ....");
     });
   } catch (error) {
     console.log(error);

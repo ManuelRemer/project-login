@@ -8,7 +8,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     msg: err.message || "Something went wrong please try again later",
   };
 
-  // duplicate value, but should be unique => if an email is already used
+  // duplicate value, but should be unique, mongoose model validation failed => if an email is already used
   if (err.code && err.code === 11000) {
     customError.msg = `Duplicate value entered for ${Object.keys(
       err.keyValue
@@ -21,10 +21,11 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     customError.statusCode = StatusCodes.BAD_REQUEST;
   }
 
-  // mongoose model validation failed
+  // required data is not provided, mongoose model validation failed
   if (err.name === "ValidationError") {
-    console.log(Object.keys(err.errors));
-    customError.msg = `Please provide ${Object.keys(err.errors).join(", ")}`;
+    customError.msg = `Required value is missing for: ${Object.keys(
+      err.errors
+    ).join(", ")}`;
     customError.statusCode = StatusCodes.BAD_REQUEST;
   }
 
