@@ -1,5 +1,6 @@
 import "./App.css";
 import { useEffect, useState } from "react";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
 function App() {
   const [text, setText] = useState("");
