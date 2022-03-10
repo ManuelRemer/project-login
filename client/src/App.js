@@ -9,9 +9,15 @@ function App() {
   the proxy feature of the create-react-app proxies the request
   to our server application */
   useEffect(() => {
-    fetch("/api/hello-world") // localhost:3000/api/hello-world -> localhost:4000/api/hello-world
-      .then((res) => res.json())
-      .then((data) => setText(data));
+    try {
+      fetch("/api/v1/hello-world") // localhost:3000/api/hello-world -> localhost:4000/api/hello-world
+        .then((res) => res.json())
+        .then((data) => {
+          setText(data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   return (
