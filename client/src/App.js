@@ -1,6 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [text, setText] = useState("");
@@ -23,7 +24,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1> {text} </h1>
+      <BrowserRouter>
+        <Navbar />
+      </BrowserRouter>
     </div>
   );
 }
