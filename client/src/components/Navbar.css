@@ -10,15 +10,8 @@
   justify-content: space-between;
   align-items: center;
 }
-.navbar button {
-  margin-left: 0.5em;
-  border-radius: 4px;
-  border: 2px solid var(--dark);
-  padding: 0.5em;
-  font-size: 1.2em;
-  font-weight: bold;
-}
 
-.navbar button:hover {
-  background-color: var(--medium);
+.navbar_links {
+  display: flex;
+  gap: 15px;
 }

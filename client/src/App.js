@@ -1,31 +1,22 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Routes } from "react-router-dom";
+
+// pages & components
 import Navbar from "./components/Navbar";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 function App() {
-  const [text, setText] = useState("");
-
-  /* This is just an example to show that we can access
-  the endpoint without writing the whole path, and that 
-  the proxy feature of the create-react-app proxies the request
-  to our server application */
-  useEffect(() => {
-    try {
-      fetch("/api/v1/hello-world") // localhost:3000/api/hello-world -> localhost:4000/api/hello-world
-        .then((res) => res.json())
-        .then((data) => {
-          setText(data);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
   return (
     <div className="App">
       <BrowserRouter>
         <Navbar />
+        <Routes>
+          <Route path="/" element="home" />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
       </BrowserRouter>
     </div>
   );
