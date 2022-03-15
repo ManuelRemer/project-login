@@ -1,10 +1,12 @@
 import { useState } from "react";
 
-// hooks
+// customHooks
 import { useFetch } from "../hooks/useFetch";
+import { useClientLogin } from "../hooks/useClientLogin";
 
 // components
 import RegInput from "../components/RegInput";
+import SubmitButton from "../components/SubmitButton";
 
 // styles
 import "./Signup.css";
@@ -15,10 +17,11 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  // useFetch
+  // useCustomHooks
   const { data, error, isPending, postData } = useFetch(
     "/api/v1/auth/register"
   );
+  useClientLogin(data);
 
   const inputFields = [
     {
@@ -39,8 +42,8 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     postData({
-      email: email,
-      password: password,
+      email,
+      password,
       displayName: name,
     });
   };
@@ -59,13 +62,7 @@ const Signup = () => {
             />
           ))}
         </div>
-        {!isPending && <button className="button">Signup</button>}
-        {isPending && (
-          <button className="button" disabled>
-            Loading
-          </button>
-        )}
-        {error && <p>{error}</p>}
+        <SubmitButton isPending={isPending} error={error} label="Signup" />
       </form>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const useFetch = (url, method = "GET", get) => {
+export const useFetch = (url, method) => {
   // states
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(false);
@@ -13,6 +13,19 @@ export const useFetch = (url, method = "GET", get) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+  };
+
+  const useGetData = () => {
+    const getData = () => {
+      const { token } = JSON.parse(localStorage.getItem("userData"));
+      setOptions({
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    };
+    useEffect(() => {
+      getData();
+    }, []);
   };
 
   useEffect(() => {
@@ -45,14 +58,12 @@ export const useFetch = (url, method = "GET", get) => {
         }
       }
     };
-    if (get && options.method === "GET") {
-      fetchData();
-    }
-    if (options && options.method === "POST") {
+
+    if (options) {
       fetchData(options);
     }
     return () => controller.abort();
-  }, [url, options, method, get]);
+  }, [url, options]);
 
-  return { data, isPending, error, postData };
+  return { data, isPending, error, postData, useGetData };
 };

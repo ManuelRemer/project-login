@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // customHooks
 import { useFetch } from "../hooks/useFetch";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useClientLogin } from "../hooks/useClientLogin";
 
 // components
 import RegInput from "../components/RegInput";
+import SubmitButton from "../components/SubmitButton";
 
 // styles
 import "./Login.css";
@@ -17,14 +18,7 @@ const Login = () => {
 
   // useCustomHooks
   const { data, error, isPending, postData } = useFetch("/api/v1/auth/login");
-  const { user, dispatch } = useAuthContext();
-
-  useEffect(() => {
-    if (data) {
-      localStorage.setItem("userData", JSON.stringify(data));
-      dispatch({ type: "LOGIN", payload: data.user.name });
-    }
-  }, [data]);
+  useClientLogin(data);
 
   const inputFields = [
     {
@@ -63,7 +57,7 @@ const Login = () => {
             />
           ))}
         </div>
-        <button className="button">Login</button>
+        <SubmitButton isPending={isPending} error={error} label="Login" />
       </form>
     </div>
   );
