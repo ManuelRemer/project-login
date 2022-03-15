@@ -14,14 +14,11 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [auth, setAuth] = useState(null);
 
   // useFetch
-  const { error, isPending, data, postData } = useFetch(
+  const { data, error, isPending, postData } = useFetch(
     "/api/v1/auth/register"
   );
-
-  console.log(data);
 
   const inputFields = [
     {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const useFetch = (url, method = "GET") => {
+export const useFetch = (url, method = "GET", get) => {
   // states
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(false);
@@ -8,7 +8,6 @@ export const useFetch = (url, method = "GET") => {
   const [options, setOptions] = useState(null);
 
   const postData = (data) => {
-    console.log("inside postData");
     setOptions({
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -26,11 +25,13 @@ export const useFetch = (url, method = "GET") => {
           ...fetchOptions,
           signal: controller.signal,
         });
-        if (!res.ok) {
-          throw new Error(res.statusText);
-        }
+
         const data = await res.json();
-        console.log(data);
+
+        if (!res.ok) {
+          throw new Error(data.msg);
+        }
+
         setIsPending(false);
         setData(data);
         setError(null);
@@ -44,12 +45,14 @@ export const useFetch = (url, method = "GET") => {
         }
       }
     };
-
+    if (get && options.method === "GET") {
+      fetchData();
+    }
     if (options && options.method === "POST") {
       fetchData(options);
     }
     return () => controller.abort();
-  }, [url, options, method]);
+  }, [url, options, method, get]);
 
   return { data, isPending, error, postData };
 };

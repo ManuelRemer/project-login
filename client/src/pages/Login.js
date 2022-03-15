@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+// customHooks
+import { useFetch } from "../hooks/useFetch";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 // components
 import RegInput from "../components/RegInput";
@@ -7,8 +11,20 @@ import RegInput from "../components/RegInput";
 import "./Login.css";
 
 const Login = () => {
+  // states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // useCustomHooks
+  const { data, error, isPending, postData } = useFetch("/api/v1/auth/login");
+  const { user, dispatch } = useAuthContext();
+
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("userData", JSON.stringify(data));
+      dispatch({ type: "LOGIN", payload: data.user.name });
+    }
+  }, [data]);
 
   const inputFields = [
     {
@@ -25,18 +41,12 @@ const Login = () => {
     },
   ];
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const res = await fetch("/api/v1/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
+    postData({
+      email: email,
+      password: password,
     });
-    const { token, user } = await res.json();
-    console.log({ name: user.name, token: token });
   };
 
   return (

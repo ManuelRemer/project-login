@@ -3,12 +3,15 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
+// custom hooks
+import { useAuthContext } from "../hooks/useAuthContext";
+
 const Navbar = () => {
+  const { user, dispatch } = useAuthContext();
   const [clicked, setClicked] = useState(null);
 
   const handleClick = (e) => {
     const { id } = e.target;
-    console.log(e.target.className);
     setClicked(id);
   };
 
@@ -18,36 +21,47 @@ const Navbar = () => {
         <li className="navbar_title">
           <h1>In/Out</h1>
         </li>
+        {user && <li>Hallo {user}!</li>}
         <li className="navbar_links" onClick={handleClick}>
-          <Link to="/login">
+          {!user && (
+            <>
+              <Link to="/login">
+                <button
+                  onClick={() => console.log("Hello")}
+                  id="login"
+                  className={`button ${
+                    clicked === "login" ? "clicked" : "not-clicked"
+                  }`}
+                >
+                  Login
+                </button>
+              </Link>
+              <Link to="/signup">
+                <button
+                  id="signup"
+                  className={`button ${
+                    clicked === "signup" ? "clicked" : "not-clicked"
+                  }`}
+                >
+                  Signup
+                </button>
+              </Link>
+            </>
+          )}
+          {user && (
             <button
-              onClick={() => console.log("Hello")}
-              id="login"
+              id="logout"
               className={`button ${
-                clicked === "login" ? "clicked" : "not-clicked"
+                clicked === "logout" ? "clicked" : "not-clicked"
               }`}
+              onClick={() => {
+                localStorage.removeItem("userData");
+                dispatch({ type: "LOGOUT" });
+              }}
             >
-              Login
+              Logout
             </button>
-          </Link>
-          <Link to="/signup">
-            <button
-              id="signup"
-              className={`button ${
-                clicked === "signup" ? "clicked" : "not-clicked"
-              }`}
-            >
-              Signup
-            </button>
-          </Link>
-          <button
-            id="logout"
-            className={`button ${
-              clicked === "logout" ? "clicked" : "not-clicked"
-            }`}
-          >
-            Logout
-          </button>
+          )}
         </li>
       </ul>
     </div>
