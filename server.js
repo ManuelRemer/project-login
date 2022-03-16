@@ -10,13 +10,24 @@ const mongoose = require("mongoose");
 
 // npm packages
 const { StatusCodes } = require("http-status-codes");
+// npm security packages
+const helmet = require("helmet");
+const cors = require("cors");
+const xss = require("xss-clean");
+const rateLimiter = require("express-rate-limit");
 
 // custom stuff
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const { BadRequestError, AuthenticationError } = require("./errors");
 const authenticationMW = require("./middleware/auth");
 
+app.set("trust proxy", 1);
+
+app.use(rateLimiter({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(express.json());
+app.use(helmet());
+app.use(cors());
+app.use(xss());
 
 app.get("/api/v1/auth/user", async (req, res) => {
   const allUsers = await User.find({});
@@ -53,15 +64,15 @@ app.get("/api/v1/hello-world", authenticationMW, (req, res) => {
     );
 });
 
-// if (process.env.NODE_ENV === "production") {
-//   // Serve any static file
-//   app.use(express.static(path.join(__dirname, "client/build")));
+if (process.env.NODE_ENV === "production") {
+  // Serve any static file
+  app.use(express.static(path.join(__dirname, "client/build")));
 
-//   // Handle React routing, return all requests to React app
-//   app.get("/*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "client/build", "index.html"));
-//   });
-// }
+  // Handle React routing, return all requests to React app
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
+}
 
 app.use(errorHandlerMiddleware);
 
