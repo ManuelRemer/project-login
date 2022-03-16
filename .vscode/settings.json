@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "Remer"
-    ]
+    ],
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact"
+      }
 }

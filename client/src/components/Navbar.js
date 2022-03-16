@@ -21,7 +21,6 @@ const Navbar = () => {
         <li className="navbar_title">
           <h1>In/Out</h1>
         </li>
-        {user && <li>Hallo {user}!</li>}
         <li className="navbar_links" onClick={handleClick}>
           {!user && (
             <>

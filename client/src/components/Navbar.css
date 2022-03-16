@@ -15,3 +15,20 @@
   display: flex;
   gap: 15px;
 }
+
+.navbar .not-clicked:hover {
+  background-color: var(--medium);
+  color: var(--dark);
+}
+
+.navbar .clicked {
+  background-color: var(--dark);
+  color: var(--medium);
+}
+
+@media (max-width: 500px) {
+  .navbar ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
