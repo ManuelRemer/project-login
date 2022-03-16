@@ -14,6 +14,7 @@ const { StatusCodes } = require("http-status-codes");
 // custom stuff
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const { BadRequestError, AuthenticationError } = require("./errors");
+const authenticationMW = require("./middleware/auth");
 
 app.use(express.json());
 
@@ -44,19 +45,23 @@ app.post("/api/v1/auth/login", async (req, res, next) => {
   res.status(StatusCodes.OK).json({ user: { name: user.displayName }, token });
 });
 
-app.get("/api/v1/hello-world", (req, res) => {
-  res.status(StatusCodes.OK).json("Hello Everyone");
+app.get("/api/v1/hello-world", authenticationMW, (req, res) => {
+  res
+    .status(StatusCodes.OK)
+    .json(
+      `You got through here because you successfully received and returned a valid token without knowing it.`
+    );
 });
 
-if (process.env.NODE_ENV === "production") {
-  // Serve any static file
-  app.use(express.static(path.join(__dirname, "client/build")));
+// if (process.env.NODE_ENV === "production") {
+//   // Serve any static file
+//   app.use(express.static(path.join(__dirname, "client/build")));
 
-  // Handle React routing, return all requests to React app
-  app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client/build", "index.html"));
-  });
-}
+//   // Handle React routing, return all requests to React app
+//   app.get("/*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "client/build", "index.html"));
+//   });
+// }
 
 app.use(errorHandlerMiddleware);
 

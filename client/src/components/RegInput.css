@@ -1,0 +1,14 @@
+label {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  background-color: var(--medium);
+  border: 2px solid var(--dark);
+  border-radius: 4px;
+  font-size: 1em;
+  padding: 8px 6px;
+  color: var(--dark);
+}
