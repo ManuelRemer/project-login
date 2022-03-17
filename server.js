@@ -25,7 +25,11 @@ app.set("trust proxy", 1);
 
 app.use(rateLimiter({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(express.json());
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 app.use(cors());
 app.use(xss());
 
@@ -76,13 +80,13 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(errorHandlerMiddleware);
 
-const { PORT } = process.env;
+const port = process.env.PORT || 4000;
 
 const start = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    app.listen(PORT, () => {
-      console.log("listening on port 4000 ....");
+    app.listen(port, () => {
+      console.log(`listening on port ${port} ....`);
     });
   } catch (error) {
     console.log(error);

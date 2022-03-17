@@ -15,6 +15,11 @@ const Navbar = () => {
     setClicked(id);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userData");
+    dispatch({ type: "LOGOUT" });
+  };
+
   return (
     <div className="navbar">
       <ul>
@@ -53,10 +58,7 @@ const Navbar = () => {
               className={`button ${
                 clicked === "logout" ? "clicked" : "not-clicked"
               }`}
-              onClick={() => {
-                localStorage.removeItem("userData");
-                dispatch({ type: "LOGOUT" });
-              }}
+              onClick={handleLogout}
             >
               Logout
             </button>

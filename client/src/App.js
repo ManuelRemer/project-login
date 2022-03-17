@@ -11,9 +11,7 @@ import { useAuthContext } from "./hooks/useAuthContext";
 import Home from "./pages/Home";
 
 function App() {
-  const { user, authIsReady } = useAuthContext();
-
-  console.log(user, authIsReady);
+  const { user } = useAuthContext();
 
   return (
     <div className="App">
