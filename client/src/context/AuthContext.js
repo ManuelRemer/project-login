@@ -26,7 +26,6 @@ export const AuthContextProvider = ({ children }) => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     userData &&
       dispatch({ type: "AUTH_IS_READY", payload: userData.user.name });
-    console.log("auth is ready");
   }, []);
 
   return (
